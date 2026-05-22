@@ -36,7 +36,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set_theme()
 
-# deep learning and computer vision
+# Deep learning and Computer vision
 import cv2
 
 from sklearn.model_selection import train_test_split
@@ -81,11 +81,11 @@ for label, value in CLASS_LABELS.items():
 
         img_path = os.path.join(data_folder, filename)
 
-        # read image
+        # Read image
         img = cv2.imread(img_path)
-        # resize
+        # Resize
         img = cv2.resize(img, (IMG_WIDTH, IMG_HEIGHT))
-        # normalize image
+        # Normalize image
         img = img / 255.0
 
         data.append(img)
@@ -118,7 +118,7 @@ for row in range(3) :
 X_train, X_temp, y_train, y_temp = train_test_split(data, labels, test_size=0.2, random_state=42)
 X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42)
 
-# dataset shapes
+# Dataset shapes
 print(f"training data : {X_train.shape}, training labels : {y_train.shape}")
 print(f"validation data : {X_val.shape}, validation labels : {y_val.shape}")
 print(f"testing data : {X_test.shape}, testing labels : {y_test.shape}")
@@ -129,7 +129,7 @@ print(f"testing data : {X_test.shape}, testing labels : {y_test.shape}")
 
 model = Sequential()
 
-# conv Layers
+# Conv Layers
 model.add(Conv2D(20, (4, 4), activation='relu', input_shape=(224, 224, 3)))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(BatchNormalization())
@@ -142,7 +142,7 @@ model.add(Conv2D(20, (2, 2), activation='relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(BatchNormalization())
 
-# flat and dense layers
+# Flat and Dense layers
 model.add(Flatten())
 model.add(Dense(1024, activation='relu'))
 model.add(Dropout(0.5))
@@ -152,7 +152,7 @@ model.add(Dense(256, activation='relu'))
 model.add(Dropout(0.5))
 model.add(Dense(128, activation='relu'))
 model.add(Dense(64, activation='relu'))
-model.add(Dense(2, activation='softmax'))  #output layer ===> two class [0,1] == [yes, no]
+model.add(Dense(2, activation='softmax'))  # Output layer ===> two class [0,1] == [yes, no]
 
 
 model.compile(optimizer=Adam(learning_rate=0.001),
@@ -164,9 +164,8 @@ model.summary()
 
 keras.utils.plot_model(model,show_shapes=True)
 
-# Train Model
 
-# train model
+# Train Model
 history = model.fit(
     X_train,
     y_train,
@@ -176,14 +175,14 @@ history = model.fit(
 
 # **6- Model Evaluation**
 
-# plot traning acc
+# Plot Traning ACC
 plt.plot(history.history['accuracy'], label='Train Accuracy')
 plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
 plt.legend()
 plt.title('Accuracy')
 plt.show()
 
-# plot loss
+# Plot Loss
 plt.plot(history.history['loss'], label='Train Loss')
 plt.plot(history.history['val_loss'], label='Validation Loss')
 plt.legend()
