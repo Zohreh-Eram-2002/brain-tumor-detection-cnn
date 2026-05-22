@@ -1,5 +1,5 @@
-# # **1- Overview :**
-# ### **in this project we will implement the below paper**
+# **1- Overview :**
+# **in this project we will implement the below paper**
 # 
 # https://www.researchgate.net/publication/362504981_Brain_Tumor_Detection_using_MRI_Images_and_Convolutional_Neural_Network
 # 
@@ -25,9 +25,9 @@
 # accuracy rates. For the given dataset, CNN proves to be the
 # better technique for predicting the presence of brain tumors.
 
-# # **2- Setup**
+# **2- Setup**
 
-# ### Import Libraries
+# Import Libraries
 
 import os
 import pandas as pd
@@ -36,7 +36,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set_theme()
 
-#deep learning and computer vision
+# deep learning and computer vision
 import cv2
 
 from sklearn.model_selection import train_test_split
@@ -49,27 +49,27 @@ from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropou
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.optimizers import Adam
 
-# ### Constants And Parameters
+# Constants And Parameters
 
 DATASET_PATH = "/content/brain_tumor_dataset/Brain_Tumor_Detection"
 
-#Data Parameter
+# Data Parameter
 CLASS_LABELS = {"yes": 1, "no": 0}
 IMG_HEIGHT = 224
 IMG_WIDTH = 224
 CHANNELS = 3
 
-#CNN Network HyperParameters
+# CNN Network HyperParameters
 
-# # **3- Load Data**
+# **3- Load Data**
 
-# ### Download Data From Kaggle And Unzip ( https://www.kaggle.com/datasets/abhranta/brain-tumor-detection-mri/code)
+# Download Data From Kaggle And Unzip ( https://www.kaggle.com/datasets/abhranta/brain-tumor-detection-mri/code)
 
 !curl -L -o  brain-tumor-detection-mri.zip https://www.kaggle.com/api/v1/datasets/download/abhranta/brain-tumor-detection-mri
 
 !unzip /content/brain-tumor-detection-mri.zip -d brain_tumor_dataset
 
-# ### Load Images (Yes / No From DATASET Path)
+# Load Images (Yes / No From DATASET Path)
 
 data = []
 labels = []
@@ -81,11 +81,11 @@ for label, value in CLASS_LABELS.items():
 
         img_path = os.path.join(data_folder, filename)
 
-        #read image
+        # read image
         img = cv2.imread(img_path)
-        #resize
+        # resize
         img = cv2.resize(img, (IMG_WIDTH, IMG_HEIGHT))
-        #normalize image
+        # normalize image
         img = img / 255.0
 
         data.append(img)
@@ -97,7 +97,7 @@ labels = np.array(labels, dtype=np.int32)
 
 print("Number of MRI Images : ",len(data))
 
-# ### Show sample of images
+# Show sample of images
 
 sample_indicies = np.random.randint(0,3000,9)
 
@@ -113,19 +113,19 @@ for row in range(3) :
       counter +=1
 
 
-# # **4- Prepare Data For Traning Model**
+# **4- Prepare Data For Traning Model**
 
 X_train, X_temp, y_train, y_temp = train_test_split(data, labels, test_size=0.2, random_state=42)
 X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42)
 
-#dataset shapes
+# dataset shapes
 print(f"training data : {X_train.shape}, training labels : {y_train.shape}")
 print(f"validation data : {X_val.shape}, validation labels : {y_val.shape}")
 print(f"testing data : {X_test.shape}, testing labels : {y_test.shape}")
 
-# # **5- Build CNN Model (with Keras)**
+# **5- Build CNN Model (with Keras)**
 
-# ### Build Model
+# Build Model
 
 model = Sequential()
 
@@ -142,7 +142,7 @@ model.add(Conv2D(20, (2, 2), activation='relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(BatchNormalization())
 
-#flat and dense layers
+# flat and dense layers
 model.add(Flatten())
 model.add(Dense(1024, activation='relu'))
 model.add(Dropout(0.5))
@@ -164,9 +164,9 @@ model.summary()
 
 keras.utils.plot_model(model,show_shapes=True)
 
-# ### Train Model
+# Train Model
 
-#train model
+# train model
 history = model.fit(
     X_train,
     y_train,
@@ -174,16 +174,16 @@ history = model.fit(
     validation_data=(X_val,y_val))
 
 
-# # **6- Model Evaluation**
+# **6- Model Evaluation**
 
-#plot traning acc
+# plot traning acc
 plt.plot(history.history['accuracy'], label='Train Accuracy')
 plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
 plt.legend()
 plt.title('Accuracy')
 plt.show()
 
-#plot loss
+# plot loss
 plt.plot(history.history['loss'], label='Train Loss')
 plt.plot(history.history['val_loss'], label='Validation Loss')
 plt.legend()
@@ -206,7 +206,7 @@ y_true = y_test
 
 pd.DataFrame(classification_report(y_true, y_pred_classes,output_dict=True)).T
 
-# ### Confusion Matrix
+# Confusion Matrix
 
 cm = confusion_matrix(y_true, y_pred_classes)
 
